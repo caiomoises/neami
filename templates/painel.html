@@ -12,6 +12,7 @@
       --cinza-claro: #ccc;
       --cinza-escuro: #888;
       --branco: #fff;
+      --sombra: 0 0 20px rgba(0, 0, 0, 0.4);
     }
     
     body {
@@ -22,191 +23,150 @@
       padding: 2vw;
       min-height: 100vh;
       box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
     }
     
-    .container {
-      max-width: 1400px;
-      margin: 0 auto;
-      text-align: center;
+    .main-container {
+      display: flex;
+      flex: 1;
+      width: 100%;
+    }
+    
+    .logo-side {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100px;
     }
     
     .logo {
-      max-width: min(200px, 30vw);
-      margin-bottom: min(20px, 3vh);
+      width: 80px;
+      height: auto;
+    }
+    
+    .content-center {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      max-width: 1800px;
+      margin: 0 auto;
     }
     
     .painel-container {
-      display: flex;
-      justify-content: center;
-      gap: min(30px, 3vw);
-      margin-top: min(30px, 4vh);
-      align-items: flex-start;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: min(20px, 2vw);
+      margin-bottom: min(20px, 2vw);
     }
     
-    .painel {
+    .chamada-card {
       background-color: var(--verde-painel);
-      padding: min(30px, 3vw);
       border-radius: min(10px, 1vw);
-      box-shadow: 0 0 min(20px, 2vw) rgba(0, 0, 0, 0.4);
+      box-shadow: var(--sombra);
+      padding: min(20px, 2vw);
       transition: all 0.3s ease;
-      width: 100%;
-      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
     }
     
-    /* Painel atual (maior) */
-    .painel-atual {
-      border: min(3px, 0.3vw) solid var(--verde-destaque);
-      transform: scale(1.02);
-      box-shadow: 0 0 min(30px, 3vw) rgba(78, 241, 146, 0.3);
-      flex: 1.2;
+    .card-content {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: min(15px, 1.5vw);
     }
     
-    /* Painel última chamada (menor) */
-    .painel-ultima {
-      flex: 0.8;
-      opacity: 0.9;
-      transform: scale(0.98);
+    .info-item {
+      background-color: rgba(78, 241, 146, 0.1);
+      border: 1px solid rgba(78, 241, 146, 0.3);
+      border-radius: min(8px, 0.8vw);
+      padding: min(15px, 1.5vw);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: min(100px, 12vh);
+      transition: all 0.3s ease;
     }
     
-    .titulo-painel {
-      font-size: clamp(18px, 2vw, 26px);
-      margin-bottom: min(25px, 3vh);
+    .info-item:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 3px 10px rgba(78, 241, 146, 0.2);
+    }
+    
+    .info-label {
+      color: var(--verde-destaque);
+      font-size: clamp(14px, 1.4vw, 18px);
+      margin-bottom: min(8px, 0.8vh);
+      font-weight: bold;
+      text-align: center;
+    }
+    
+    .info-value {
+      font-size: clamp(18px, 1.8vw, 24px);
+      font-weight: 600;
+      color: var(--branco);
+      text-align: center;
+      word-break: break-word;
+    }
+    
+    .card-title {
+      font-size: clamp(18px, 1.8vw, 24px);
+      margin-bottom: min(20px, 2vh);
       color: var(--verde-destaque);
       font-weight: bold;
-      padding-bottom: min(10px, 1vh);
+      padding-bottom: min(8px, 0.8vh);
       border-bottom: min(1px, 0.1vw) solid var(--verde-painel);
     }
     
-    .painel-atual .titulo-painel {
-      border-bottom: min(1px, 0.1vw) solid var(--verde-destaque);
-    }
-    
-    .linha-chamada {
-      display: flex;
-      margin: min(15px, 2vh) 0;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-    
-    .chamada-label {
-      color: var(--cinza-claro);
-      width: min(120px, 20vw);
-      text-align: right;
-      padding-right: min(15px, 2vw);
-      font-size: clamp(14px, 1.6vw, 18px);
-    }
-    
-    .chamada-valor {
-      flex: 1;
-      text-align: left;
-      font-size: clamp(16px, 1.8vw, 21px);
-      word-break: break-word;
-      min-width: min(200px, 40vw);
-    }
-    
-    .painel-atual .chamada-valor {
-      color: var(--branco);
-      font-weight: 500;
-      font-size: clamp(18px, 2vw, 22px);
-    }
-    
-    .timestamp {
-      margin-top: min(30px, 4vh);
+    .card-timestamp {
+      margin-top: min(15px, 2vh);
       color: var(--cinza-escuro);
       font-size: clamp(12px, 1.2vw, 14px);
       font-style: italic;
+      text-align: right;
     }
     
     @media (max-width: 768px) {
       .painel-container {
-        flex-direction: column;
-        align-items: center;
-        gap: min(20px, 3vh);
+        grid-template-columns: 1fr;
       }
       
-      .painel, .painel-atual, .painel-ultima {
-        width: 100%;
-        flex: none;
-        transform: none;
-        opacity: 1;
-        padding: min(20px, 4vw);
+      .card-content {
+        grid-template-columns: 1fr;
       }
       
-      .chamada-label {
-        width: min(100px, 25vw);
-        text-align: left;
-        padding-right: 0;
-        margin-bottom: min(5px, 1vh);
-      }
-      
-      .chamada-valor {
-        min-width: 100%;
+      .logo-side {
+        display: none;
       }
     }
     
     @media (max-width: 480px) {
-      .linha-chamada {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      
-      .chamada-label {
-        width: 100%;
-        margin-bottom: min(2px, 0.5vh);
+      .info-item {
+        min-height: min(80px, 10vh);
       }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <img src="/static/logo.png" class="logo" alt="Logo">
-
-    <div class="painel-container">
-      <div class="painel painel-atual">
-        <div class="titulo-painel">CHAMADA ATUAL</div>
-        
-        <div class="linha-chamada">
-          <span class="chamada-label">Horário:</span>
-          <span class="chamada-valor" id="horario">-</span>
-        </div>
-        <div class="linha-chamada">
-          <span class="chamada-label">Sala:</span>
-          <span class="chamada-valor" id="sala">-</span>
-        </div>
-        <div class="linha-chamada">
-          <span class="chamada-label">Profissional:</span>
-          <span class="chamada-valor" id="profissional">-</span>
-        </div>
-        <div class="linha-chamada">
-          <span class="chamada-label">Paciente:</span>
-          <span class="chamada-valor" id="paciente">-</span>
-        </div>
-        
-        <div class="timestamp" id="atual_timestamp"></div>
+  <div class="main-container">
+    <div class="logo-side">
+      <img src="/static/logo.png" class="logo" alt="Logo">
+    </div>
+    
+    <div class="content-center">
+      <div class="painel-container" id="chamadas-superior">
+        <!-- 3 primeiros cards serão inseridos aqui -->
       </div>
-
-      <div class="painel painel-ultima">
-        <div class="titulo-painel">ÚLTIMA CHAMADA</div>
-        
-        <div class="linha-chamada">
-          <span class="chamada-label">Horário:</span>
-          <span class="chamada-valor" id="ultima_horario">-</span>
-        </div>
-        <div class="linha-chamada">
-          <span class="chamada-label">Sala:</span>
-          <span class="chamada-valor" id="ultima_sala">-</span>
-        </div>
-        <div class="linha-chamada">
-          <span class="chamada-label">Profissional:</span>
-          <span class="chamada-valor" id="ultima_profissional">-</span>
-        </div>
-        <div class="linha-chamada">
-          <span class="chamada-label">Paciente:</span>
-          <span class="chamada-valor" id="ultima_paciente">-</span>
-        </div>
-        
-        <div class="timestamp" id="ultima_timestamp"></div>
+      
+      <div class="painel-container" id="chamadas-inferior">
+        <!-- 3 últimos cards serão inseridos aqui -->
       </div>
+    </div>
+    
+    <div class="logo-side">
+      <img src="/static/logo.png" class="logo" alt="Logo">
     </div>
   </div>
 
@@ -217,28 +177,99 @@
       return data.toLocaleString('pt-BR');
     }
 
+    function criarCardChamada(chamada, index) {
+      const card = document.createElement('div');
+      card.className = 'chamada-card';
+      
+      const titulo = document.createElement('div');
+      titulo.className = 'card-title';
+      titulo.textContent = `Chamada ${index + 1}`;
+      card.appendChild(titulo);
+      
+      const content = document.createElement('div');
+      content.className = 'card-content';
+      
+      // Criar os quadrados de informação
+      const campos = [
+        { label: 'Horário', value: chamada.horario || '-', id: `chamada_${index}_horario` },
+        { label: 'Sala', value: chamada.sala || '-', id: `chamada_${index}_sala` },
+        { label: 'Profissional', value: chamada.profissional || '-', id: `chamada_${index}_profissional` },
+        { label: 'Paciente', value: chamada.paciente || '-', id: `chamada_${index}_paciente` }
+      ];
+      
+      campos.forEach(campo => {
+        const item = document.createElement('div');
+        item.className = 'info-item';
+        
+        const label = document.createElement('div');
+        label.className = 'info-label';
+        label.textContent = campo.label;
+        
+        const value = document.createElement('div');
+        value.className = 'info-value';
+        value.textContent = campo.value;
+        value.id = campo.id;
+        
+        item.appendChild(label);
+        item.appendChild(value);
+        content.appendChild(item);
+      });
+      
+      card.appendChild(content);
+      
+      const timestamp = document.createElement('div');
+      timestamp.className = 'card-timestamp';
+      timestamp.textContent = chamada.timestamp ? `Registrado em: ${formatarDataHora(chamada.timestamp)}` : '';
+      timestamp.id = `chamada_${index}_timestamp`;
+      card.appendChild(timestamp);
+      
+      return card;
+    }
+
     function atualizarPainel() {
       fetch('/dados')
         .then(res => res.json())
         .then(data => {
-          const atual = data.chamada_atual || {};
-          const ultima = data.ultima_chamada || {};
-
-          // Atualiza chamada atual
-          document.getElementById('horario').textContent = atual.horario || '-';
-          document.getElementById('sala').textContent = atual.sala || '-';
-          document.getElementById('profissional').textContent = atual.profissional || '-';
-          document.getElementById('paciente').textContent = atual.paciente || '-';
-          document.getElementById('atual_timestamp').textContent = 
-            atual.timestamp ? `Atualizado em: ${formatarDataHora(atual.timestamp)}` : '';
-
-          // Atualiza última chamada
-          document.getElementById('ultima_horario').textContent = ultima.horario || '-';
-          document.getElementById('ultima_sala').textContent = ultima.sala || '-';
-          document.getElementById('ultima_profissional').textContent = ultima.profissional || '-';
-          document.getElementById('ultima_paciente').textContent = ultima.paciente || '-';
-          document.getElementById('ultima_timestamp').textContent = 
-            ultima.timestamp ? `Chamada anterior: ${formatarDataHora(ultima.timestamp)}` : '';
+          const chamadas = data.chamadas || [];
+          
+          // Se não houver chamadas, limpa os containers
+          if (chamadas.length === 0) {
+            document.getElementById('chamadas-superior').innerHTML = '';
+            document.getElementById('chamadas-inferior').innerHTML = '';
+            return;
+          }
+          
+          // Ordena as chamadas por horário
+          chamadas.sort((a, b) => {
+            const [horaA, minutoA] = (a.horario || '').split(':').map(Number);
+            const [horaB, minutoB] = (b.horario || '').split(':').map(Number);
+            
+            if (horaA === horaB) return minutoA - minutoB;
+            return horaA - horaB;
+          });
+          
+          // Pega apenas as 6 primeiras chamadas
+          const chamadasExibidas = chamadas.slice(0, 6);
+          
+          // Atualiza os containers
+          const containerSuperior = document.getElementById('chamadas-superior');
+          const containerInferior = document.getElementById('chamadas-inferior');
+          containerSuperior.innerHTML = '';
+          containerInferior.innerHTML = '';
+          
+          // Adiciona os 3 primeiros cards no container superior
+          chamadasExibidas.slice(0, 3).forEach((chamada, index) => {
+            containerSuperior.appendChild(
+              criarCardChamada(chamada, index)
+            );
+          });
+          
+          // Adiciona os 3 últimos cards no container inferior
+          chamadasExibidas.slice(3, 6).forEach((chamada, index) => {
+            containerInferior.appendChild(
+              criarCardChamada(chamada, index + 3)
+            );
+          });
         })
         .catch(error => {
           console.error('Erro ao atualizar painel:', error);

@@ -1,14 +1,17 @@
 from flask import Flask, render_template, request, jsonify
 import json
 import os
+from datetime import datetime
 
 app = Flask(__name__)
 DADOS_PATH = os.path.join('static', 'dados.json')
 
 DADOS_VAZIOS = {
-    "chamada_atual": {},
-    "ultima_chamada": {}
+    "chamadas": [],
+    "ultima_atualizacao": None
 }
+
+MAX_CHAMADAS = 6  # Número máximo de chamadas a armazenar
 
 @app.route('/')
 def painel():
@@ -22,21 +25,34 @@ def controle():
 def get_dados():
     if os.path.exists(DADOS_PATH):
         with open(DADOS_PATH, 'r') as f:
-            return jsonify(json.load(f))
+            dados = json.load(f)
+            # Ordena as chamadas por timestamp (mais recente primeiro)
+            dados["chamadas"] = sorted(
+                dados.get("chamadas", []),
+                key=lambda x: x.get("timestamp", ""),
+                reverse=True
+            )
+            return jsonify(dados)
     return jsonify(DADOS_VAZIOS)
 
 @app.route('/dados', methods=['POST'])
 def atualizar_dados():
     novos_dados = request.get_json()
+    novos_dados['timestamp'] = datetime.now().isoformat()
 
     dados_atuais = DADOS_VAZIOS
     if os.path.exists(DADOS_PATH):
         with open(DADOS_PATH, 'r') as f:
             dados_atuais = json.load(f)
 
+    # Adiciona a nova chamada
+    chamadas = dados_atuais.get("chamadas", [])
+    chamadas.insert(0, novos_dados)
+    
+    # Mantém apenas as últimas MAX_CHAMADAS chamadas
     dados_salvar = {
-        "chamada_atual": novos_dados,
-        "ultima_chamada": dados_atuais.get("chamada_atual", {})
+        "chamadas": chamadas[:MAX_CHAMADAS],
+        "ultima_atualizacao": datetime.now().isoformat()
     }
 
     with open(DADOS_PATH, 'w') as f:

@@ -1,4 +1,4 @@
 {
-  "chamada_atual": {},
-  "ultima_chamada": {}
+  "chamadas": [],
+  "ultima_atualizacao": null
 }

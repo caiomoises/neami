@@ -116,13 +116,12 @@
     }
 
     function limparPainel() {
-      if (confirm('Tem certeza que deseja limpar o painel?\nOs dados das duas ultimas chamadas serão perdidos.')) {
+      if (confirm('Tem certeza que deseja limpar o painel?\nTodos os dados do histórico serão perdidos.')) {
         fetch('/limpar', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' }
         })
         .then(() => {
-          // Limpa os campos do formulário também
           document.getElementById('inputHorario').value = '';
           document.getElementById('inputSala').value = '';
           document.getElementById('inputProfissional').value = '';
