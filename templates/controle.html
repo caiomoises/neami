@@ -6,7 +6,7 @@
   <title>Controle de Chamada</title>
   <style>
     body {
-      background: #1e1e2f;
+      background: #0e411d;
       font-family: 'Segoe UI', sans-serif;
       display: flex;
       justify-content: center;
@@ -16,7 +16,7 @@
       color: #ffffff;
     }
     .container {
-      background: #2a2a3d;
+      background: #2a3d2d;
       padding: 40px;
       border-radius: 10px;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
@@ -43,21 +43,38 @@
       margin-bottom: 20px;
       border-radius: 5px;
       border: none;
-      background: #3a3a50;
+      background: #3a503f;
       color: #fff;
+    }
+    input[type="time"] {
+      color-scheme: dark;
+    }
+    .botoes {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
     }
     button {
       width: 100%;
       padding: 12px;
-      background-color: #007bff;
       color: white;
       border: none;
       border-radius: 5px;
       font-size: 16px;
       cursor: pointer;
+      transition: background-color 0.3s;
     }
-    button:hover {
-      background-color: #0056b3;
+    .btn-atualizar {
+      background-color: #068a01;
+    }
+    .btn-atualizar:hover {
+      background-color: #00b32d;
+    }
+    .btn-limpar {
+      background-color: #8a0101;
+    }
+    .btn-limpar:hover {
+      background-color: #b30000;
     }
   </style>
 </head>
@@ -65,36 +82,77 @@
   <div class="container">
     <img src="/static/logo.png" class="logo" alt="Logo">
     <h2>Controle de Chamada</h2>
-    <label for="inputSenha">Senha:</label>
-    <input type="text" id="inputSenha">
+
+    <label for="inputHorario">Horário:</label>
+    <input type="time" id="inputHorario">
 
     <label for="inputSala">Sala:</label>
     <input type="text" id="inputSala">
 
-    <button onclick="salvar()">Atualizar Painel</button>
+    <label for="inputProfissional">Profissional:</label>
+    <input type="text" id="inputProfissional">
+
+    <label for="inputPaciente">Paciente:</label>
+    <input type="text" id="inputPaciente">
+
+    <div class="botoes">
+      <button class="btn-atualizar" onclick="salvar()">Atualizar Painel</button>
+      <button class="btn-limpar" onclick="limparPainel()">Limpar Painel</button>
+    </div>
   </div>
 
   <script>
     function salvar() {
-      const senha = document.getElementById('inputSenha').value;
+      const horario = document.getElementById('inputHorario').value;
       const sala = document.getElementById('inputSala').value;
+      const profissional = document.getElementById('inputProfissional').value;
+      const paciente = document.getElementById('inputPaciente').value;
+
       fetch('/dados', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ senha, sala })
+        body: JSON.stringify({ horario, sala, profissional, paciente })
       });
     }
 
-    function carregarValoresIniciais() {
+    function limparPainel() {
+      if (confirm('Tem certeza que deseja limpar o painel?\nOs dados das duas ultimas chamadas serão perdidos.')) {
+        fetch('/limpar', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' }
+        })
+        .then(() => {
+          // Limpa os campos do formulário também
+          document.getElementById('inputHorario').value = '';
+          document.getElementById('inputSala').value = '';
+          document.getElementById('inputProfissional').value = '';
+          document.getElementById('inputPaciente').value = '';
+          alert('Painel limpo com sucesso!');
+        })
+        .catch(error => {
+          console.error('Erro ao limpar painel:', error);
+          alert('Erro ao limpar o painel!');
+        });
+      }
+    }
+
+    function carregarUltimoAtendimento() {
       fetch('/dados')
         .then(res => res.json())
         .then(data => {
-          document.getElementById('inputSenha').value = data.senha;
-          document.getElementById('inputSala').value = data.sala;
+          if (data) {
+            document.getElementById('inputHorario').value = data.horario || '';
+            document.getElementById('inputSala').value = data.sala || '';
+            document.getElementById('inputProfissional').value = data.profissional || '';
+            document.getElementById('inputPaciente').value = data.paciente || '';
+          }
+        })
+        .catch(error => {
+          console.error('Erro ao carregar dados:', error);
         });
     }
 
-    window.onload = carregarValoresIniciais;
+    window.onload = carregarUltimoAtendimento;
   </script>
 </body>
 </html>

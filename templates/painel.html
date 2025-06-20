@@ -1,59 +1,253 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Painel de Chamada</title>
   <style>
+    :root {
+      --verde-principal: #0e411d;
+      --verde-painel: #2a3d2d;
+      --verde-destaque: #4ef192;
+      --cinza-claro: #ccc;
+      --cinza-escuro: #888;
+      --branco: #fff;
+    }
+    
     body {
-      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
-      color: #ffffff;
-      font-family: 'Segoe UI', sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
+      background-color: var(--verde-principal);
+      color: var(--branco);
+      font-family: 'Segoe UI', system-ui, sans-serif;
       margin: 0;
+      padding: 2vw;
+      min-height: 100vh;
+      box-sizing: border-box;
     }
-    .logo {
-      max-width: 200px;
-      margin-bottom: 20px;
-    }
-    .painel {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 40px;
-      border-radius: 20px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
       text-align: center;
     }
-    .painel h1 {
-      font-size: 6em;
-      margin: 0;
+    
+    .logo {
+      max-width: min(200px, 30vw);
+      margin-bottom: min(20px, 3vh);
     }
-    .painel h2 {
-      font-size: 3em;
-      margin: 10px 0 0;
+    
+    .painel-container {
+      display: flex;
+      justify-content: center;
+      gap: min(30px, 3vw);
+      margin-top: min(30px, 4vh);
+      align-items: flex-start;
+    }
+    
+    .painel {
+      background-color: var(--verde-painel);
+      padding: min(30px, 3vw);
+      border-radius: min(10px, 1vw);
+      box-shadow: 0 0 min(20px, 2vw) rgba(0, 0, 0, 0.4);
+      transition: all 0.3s ease;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    
+    /* Painel atual (maior) */
+    .painel-atual {
+      border: min(3px, 0.3vw) solid var(--verde-destaque);
+      transform: scale(1.02);
+      box-shadow: 0 0 min(30px, 3vw) rgba(78, 241, 146, 0.3);
+      flex: 1.2;
+    }
+    
+    /* Painel última chamada (menor) */
+    .painel-ultima {
+      flex: 0.8;
+      opacity: 0.9;
+      transform: scale(0.98);
+    }
+    
+    .titulo-painel {
+      font-size: clamp(18px, 2vw, 26px);
+      margin-bottom: min(25px, 3vh);
+      color: var(--verde-destaque);
+      font-weight: bold;
+      padding-bottom: min(10px, 1vh);
+      border-bottom: min(1px, 0.1vw) solid var(--verde-painel);
+    }
+    
+    .painel-atual .titulo-painel {
+      border-bottom: min(1px, 0.1vw) solid var(--verde-destaque);
+    }
+    
+    .linha-chamada {
+      display: flex;
+      margin: min(15px, 2vh) 0;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    
+    .chamada-label {
+      color: var(--cinza-claro);
+      width: min(120px, 20vw);
+      text-align: right;
+      padding-right: min(15px, 2vw);
+      font-size: clamp(14px, 1.6vw, 18px);
+    }
+    
+    .chamada-valor {
+      flex: 1;
+      text-align: left;
+      font-size: clamp(16px, 1.8vw, 21px);
+      word-break: break-word;
+      min-width: min(200px, 40vw);
+    }
+    
+    .painel-atual .chamada-valor {
+      color: var(--branco);
+      font-weight: 500;
+      font-size: clamp(18px, 2vw, 22px);
+    }
+    
+    .timestamp {
+      margin-top: min(30px, 4vh);
+      color: var(--cinza-escuro);
+      font-size: clamp(12px, 1.2vw, 14px);
+      font-style: italic;
+    }
+    
+    @media (max-width: 768px) {
+      .painel-container {
+        flex-direction: column;
+        align-items: center;
+        gap: min(20px, 3vh);
+      }
+      
+      .painel, .painel-atual, .painel-ultima {
+        width: 100%;
+        flex: none;
+        transform: none;
+        opacity: 1;
+        padding: min(20px, 4vw);
+      }
+      
+      .chamada-label {
+        width: min(100px, 25vw);
+        text-align: left;
+        padding-right: 0;
+        margin-bottom: min(5px, 1vh);
+      }
+      
+      .chamada-valor {
+        min-width: 100%;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .linha-chamada {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .chamada-label {
+        width: 100%;
+        margin-bottom: min(2px, 0.5vh);
+      }
     }
   </style>
+</head>
+<body>
+  <div class="container">
+    <img src="/static/logo.png" class="logo" alt="Logo">
+
+    <div class="painel-container">
+      <div class="painel painel-atual">
+        <div class="titulo-painel">CHAMADA ATUAL</div>
+        
+        <div class="linha-chamada">
+          <span class="chamada-label">Horário:</span>
+          <span class="chamada-valor" id="horario">-</span>
+        </div>
+        <div class="linha-chamada">
+          <span class="chamada-label">Sala:</span>
+          <span class="chamada-valor" id="sala">-</span>
+        </div>
+        <div class="linha-chamada">
+          <span class="chamada-label">Profissional:</span>
+          <span class="chamada-valor" id="profissional">-</span>
+        </div>
+        <div class="linha-chamada">
+          <span class="chamada-label">Paciente:</span>
+          <span class="chamada-valor" id="paciente">-</span>
+        </div>
+        
+        <div class="timestamp" id="atual_timestamp"></div>
+      </div>
+
+      <div class="painel painel-ultima">
+        <div class="titulo-painel">ÚLTIMA CHAMADA</div>
+        
+        <div class="linha-chamada">
+          <span class="chamada-label">Horário:</span>
+          <span class="chamada-valor" id="ultima_horario">-</span>
+        </div>
+        <div class="linha-chamada">
+          <span class="chamada-label">Sala:</span>
+          <span class="chamada-valor" id="ultima_sala">-</span>
+        </div>
+        <div class="linha-chamada">
+          <span class="chamada-label">Profissional:</span>
+          <span class="chamada-valor" id="ultima_profissional">-</span>
+        </div>
+        <div class="linha-chamada">
+          <span class="chamada-label">Paciente:</span>
+          <span class="chamada-valor" id="ultima_paciente">-</span>
+        </div>
+        
+        <div class="timestamp" id="ultima_timestamp"></div>
+      </div>
+    </div>
+  </div>
+
   <script>
+    function formatarDataHora(dataString) {
+      if (!dataString) return '-';
+      const data = new Date(dataString);
+      return data.toLocaleString('pt-BR');
+    }
+
     function atualizarPainel() {
       fetch('/dados')
         .then(res => res.json())
         .then(data => {
-          document.getElementById('senha').textContent = data.senha;
-          document.getElementById('sala').textContent = data.sala;
+          const atual = data.chamada_atual || {};
+          const ultima = data.ultima_chamada || {};
+
+          // Atualiza chamada atual
+          document.getElementById('horario').textContent = atual.horario || '-';
+          document.getElementById('sala').textContent = atual.sala || '-';
+          document.getElementById('profissional').textContent = atual.profissional || '-';
+          document.getElementById('paciente').textContent = atual.paciente || '-';
+          document.getElementById('atual_timestamp').textContent = 
+            atual.timestamp ? `Atualizado em: ${formatarDataHora(atual.timestamp)}` : '';
+
+          // Atualiza última chamada
+          document.getElementById('ultima_horario').textContent = ultima.horario || '-';
+          document.getElementById('ultima_sala').textContent = ultima.sala || '-';
+          document.getElementById('ultima_profissional').textContent = ultima.profissional || '-';
+          document.getElementById('ultima_paciente').textContent = ultima.paciente || '-';
+          document.getElementById('ultima_timestamp').textContent = 
+            ultima.timestamp ? `Chamada anterior: ${formatarDataHora(ultima.timestamp)}` : '';
+        })
+        .catch(error => {
+          console.error('Erro ao atualizar painel:', error);
         });
     }
+
+    // Atualiza a cada 10 segundos e imediatamente ao carregar
     setInterval(atualizarPainel, 10000);
-    window.onload = atualizarPainel;
+    window.addEventListener('DOMContentLoaded', atualizarPainel);
   </script>
-</head>
-<body>
-  <img src="/static/logo.png" class="logo" alt="Logo">
-  <div class="painel">
-    <h1>Senha: <span id="senha">---</span></h1>
-    <h2>Sala: <span id="sala">--</span></h2>
-  </div>
 </body>
 </html>
