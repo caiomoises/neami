@@ -3,9 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Controle de Chamada</title>
+  <title>Edição de Chamadas</title>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     body {
       background: #0e411d;
@@ -15,7 +16,7 @@
       align-items: center;
       min-height: 100vh;
       margin: 0;
-      color: #ffffff;
+      color: #0e0d0d;
     }
     .container {
       background: #2a3d2d;
@@ -35,31 +36,6 @@
       margin: 10px 0 20px;
       color: #4ef192;
     }
-    
-    /* Relógio Moderno */
-    /*.relogio-container {
-      background: rgba(0, 0, 0, 0.2);
-      border-radius: 10px;
-      padding: 15px;
-      margin-bottom: 25px;
-      border: 2px solid #4ef192;
-      box-shadow: 0 0 15px rgba(78, 241, 146, 0.3);
-    }
-    .relogio {
-      font-family: 'Segment7', monospace;
-      font-size: 2.8rem;
-      letter-spacing: 3px;
-      color: #4ef192;
-      text-shadow: 0 0 10px rgba(78, 241, 146, 0.7);
-      margin: 5px 0;
-    }
-    .data {
-      font-size: 1rem;
-      color: #ccc;
-      margin-top: 5px;
-    }*/
-    
-    /* Campos do formulário */
     .form-group {
       margin-bottom: 20px;
       text-align: left;
@@ -70,7 +46,7 @@
       font-weight: bold;
       color: #4ef192;
     }
-    input {
+    select, input {
       width: 100%;
       padding: 12px;
       border-radius: 8px;
@@ -80,7 +56,11 @@
       font-size: 1rem;
       transition: all 0.3s;
     }
-    input:focus {
+    select option {
+      background-color: #2a3d2d;
+      color: white;
+    }
+    select:focus, input:focus {
       outline: none;
       box-shadow: 0 0 0 2px #4ef192;
       background: rgba(255, 255, 255, 0.15);
@@ -88,8 +68,6 @@
     input[type="time"] {
       color-scheme: dark;
     }
-    
-    /* Botões */
     .btn {
       width: 100%;
       padding: 14px;
@@ -105,23 +83,23 @@
       justify-content: center;
       gap: 8px;
     }
-    .btn-adicionar {
+    .btn-salvar {
       background-color: #068a01;
       color: white;
     }
-    .btn-adicionar:hover {
+    .btn-salvar:hover {
       background-color: #00b32d;
       transform: translateY(-2px);
       box-shadow: 0 5px 15px rgba(0, 179, 45, 0.3);
     }
-    .btn-editar {
-      background-color: #e67e22;
+    .btn-voltar {
+      background-color: #3498db;
       color: white;
     }
-    .btn-editar:hover {
-      background-color: #d35400;
+    .btn-voltar:hover {
+      background-color: #2980b9;
       transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(211, 84, 0, 0.3);
+      box-shadow: 0 5px 15px rgba(41, 128, 185, 0.3);
     }
     .btn-limpar {
       background-color: #8a0101;
@@ -132,13 +110,6 @@
       transform: translateY(-2px);
       box-shadow: 0 5px 15px rgba(179, 0, 0, 0.3);
     }
-    
-    /* Ícones nos botões */
-    .btn i {
-      font-size: 1.2rem;
-    }
-    
-    /* SweetAlert2 Customização */
     .swal2-popup {
       font-family: 'Segoe UI', sans-serif;
       background: #2a3d2d;
@@ -153,87 +124,134 @@
     .swal2-cancel {
       background-color: #8a0101 !important;
     }
-    
-    /* Fonte digital para o relógio */
-    @font-face {
-      font-family: 'Segment7';
-      src: url('https://assets.codepen.io/4175254/Segment7-4Gml.woff2') format('woff2');
-      font-style: italic;
-      font-weight: normal;
-    }
   </style>
-  <!-- Adicionando ícones do Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
   <div class="container">
     <img src="/static/logo.png" class="logo" alt="Logo">
-    <h2>Controle de Chamada</h2>
-    
-    <!-- Relógio Digital Moderno -->
-    <!--<div class="relogio-container">
-      <div class="relogio" id="relogio">00:00:00</div>
-      <div class="data" id="data">Carregando...</div>
-    </div>-->
-    
+    <h2>Edição de Chamadas</h2>
+
+    <div class="form-group">
+      <label for="selectChamada"><i class="fas fa-list"></i> Selecione a chamada:</label>
+      <select id="selectChamada" onchange="carregarChamada()">
+        <option value="">Selecione uma chamada</option>
+      </select>
+    </div>
+
     <div class="form-group">
       <label for="inputHorario"><i class="fas fa-clock"></i> Horário:</label>
       <input type="time" id="inputHorario" required>
     </div>
-    
+
     <div class="form-group">
       <label for="inputSala"><i class="fas fa-door-open"></i> Sala:</label>
       <input type="text" id="inputSala" required>
     </div>
-    
+
     <div class="form-group">
       <label for="inputProfissional"><i class="fas fa-user-md"></i> Profissional:</label>
       <input type="text" id="inputProfissional" required>
     </div>
-    
+
     <div class="form-group">
       <label for="inputPaciente"><i class="fas fa-user-injured"></i> Paciente:</label>
       <input type="text" id="inputPaciente" required>
     </div>
-    
-    <button class="btn btn-adicionar" onclick="adicionarChamada()">
-      <i class="fas fa-plus-circle"></i> Adicionar Chamada
+
+    <button class="btn btn-salvar" onclick="salvarEdicao()">
+      <i class="fas fa-save"></i> Salvar Alterações
     </button>
-    <button class="btn btn-editar" onclick="irParaEdicao()">
-      <i class="fas fa-edit"></i> Editar Chamadas
+    <button class="btn btn-voltar" onclick="window.location.href='/controle'">
+      <i class="fas fa-arrow-left"></i> Voltar
     </button>
     <button class="btn btn-limpar" onclick="limparChamadas()">
-      <i class="fas fa-trash-alt"></i> Limpar Todas
+      <i class="fas fa-trash"></i> Limpar Todas
     </button>
   </div>
 
   <script>
-    // Relógio Digital Moderno
-   // function atualizarRelogio() {
-      //const agora = new Date();
-      
-      // Formatação do horário
-      //const horas = agora.getHours().toString().padStart(2, '0');
-      //const minutos = agora.getMinutes().toString().padStart(2, '0');
-      //const segundos = agora.getSeconds().toString().padStart(2, '0');
-      //document.getElementById('relogio').textContent = `${horas}:${minutos}:${segundos}`;
-      
-      // Formatação da data
-      //const opcoesData = { 
-        //weekday: 'long', 
-        //day: 'numeric', 
-        //month: 'long', 
-        //year: 'numeric' 
-      //};
-      //const dataFormatada = agora.toLocaleDateString('pt-BR', opcoesData);
-      //document.getElementById('data').textContent = dataFormatada;
-    //}
-    
-    // Atualiza o relógio a cada segundo
-    setInterval(atualizarRelogio, 1000);
-    atualizarRelogio(); // Executa imediatamente
+    let chamadas = [];
+    let chamadaSelecionada = null;
 
-    function adicionarChamada() {
+    function carregarChamadas() {
+      Swal.fire({
+        title: 'Carregando...',
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        }
+      });
+
+      fetch('/dados')
+        .then(res => res.json())
+        .then(data => {
+          chamadas = data.chamadas || [];
+          atualizarSelectChamadas();
+          Swal.close();
+        })
+        .catch(error => {
+          console.error('Erro ao carregar chamadas:', error);
+          Swal.fire({
+            icon: 'error',
+            title: 'Falha ao carregar',
+            text: 'Não foi possível carregar as chamadas',
+            confirmButtonColor: '#e67e22'
+          });
+        });
+    }
+
+    function atualizarSelectChamadas() {
+      const select = document.getElementById('selectChamada');
+      
+      while (select.options.length > 1) {
+        select.remove(1);
+      }
+      
+      chamadas.forEach((chamada, index) => {
+        const option = document.createElement('option');
+        option.value = index;
+        option.textContent = `${chamada.horario} - Sala ${chamada.sala} - ${chamada.paciente}`;
+        select.appendChild(option);
+      });
+    }
+
+    function carregarChamada() {
+      const select = document.getElementById('selectChamada');
+      const index = select.value;
+      
+      if (index === "") {
+        chamadaSelecionada = null;
+        limparCampos();
+        return;
+      }
+      
+      chamadaSelecionada = parseInt(index);
+      const chamada = chamadas[chamadaSelecionada];
+      
+      document.getElementById('inputHorario').value = chamada.horario || '';
+      document.getElementById('inputSala').value = chamada.sala || '';
+      document.getElementById('inputProfissional').value = chamada.profissional || '';
+      document.getElementById('inputPaciente').value = chamada.paciente || '';
+    }
+
+    function limparCampos() {
+      document.getElementById('inputHorario').value = '';
+      document.getElementById('inputSala').value = '';
+      document.getElementById('inputProfissional').value = '';
+      document.getElementById('inputPaciente').value = '';
+    }
+
+    function salvarEdicao() {
+      if (chamadaSelecionada === null) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Nada selecionado',
+          text: 'Por favor, selecione uma chamada para editar',
+          confirmButtonColor: '#e67e22'
+        });
+        return;
+      }
+
       const horario = document.getElementById('inputHorario').value;
       const sala = document.getElementById('inputSala').value;
       const profissional = document.getElementById('inputProfissional').value;
@@ -243,55 +261,53 @@
         Swal.fire({
           icon: 'warning',
           title: 'Campos incompletos',
-          text: 'Por favor, preencha todos os campos!',
+          text: 'Por favor, preencha todos os campos',
           confirmButtonColor: '#e67e22'
         });
         return;
       }
 
+      const chamadaOriginal = chamadas[chamadaSelecionada];
+      
       Swal.fire({
-        title: 'Confirmar chamada?',
+        title: 'Confirmar alterações?',
         html: `<div style="text-align:left;">
-                <p><b>Horário:</b> ${horario}</p>
-                <p><b>Sala:</b> ${sala}</p>
-                <p><b>Profissional:</b> ${profissional}</p>
-                <p><b>Paciente:</b> ${paciente}</p>
+                <p><b>Original:</b> ${chamadaOriginal.horario} - ${chamadaOriginal.paciente}</p>
+                <p><b>Novo:</b> ${horario} - ${paciente}</p>
               </div>`,
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#068a01',
         cancelButtonColor: '#8a0101',
-        confirmButtonText: '<i class="fas fa-check"></i> Confirmar',
-        cancelButtonText: '<i class="fas fa-times"></i> Cancelar'
+        confirmButtonText: 'Salvar alterações',
+        cancelButtonText: 'Cancelar'
       }).then((result) => {
         if (result.isConfirmed) {
-          fetch('/dados', {
+          fetch('/editar', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ horario, sala, profissional, paciente })
+            body: JSON.stringify({
+              index: chamadaSelecionada,
+              dados: { horario, sala, profissional, paciente }
+            })
           })
           .then(() => {
-            document.getElementById('inputHorario').value = '';
-            document.getElementById('inputSala').value = '';
-            document.getElementById('inputProfissional').value = '';
-            document.getElementById('inputPaciente').value = '';
-            
             Swal.fire({
               position: 'center',
               icon: 'success',
-              title: 'Chamada registrada!',
+              title: 'Alterações salvas!',
               showConfirmButton: false,
-              timer: 1500,
-              background: '#2a3d2d',
-              color: 'white'
+              timer: 1500
+            }).then(() => {
+              carregarChamadas();
             });
           })
           .catch(error => {
-            console.error('Erro ao adicionar chamada:', error);
+            console.error('Erro ao atualizar chamada:', error);
             Swal.fire({
               icon: 'error',
-              title: 'Erro',
-              text: 'Falha ao registrar chamada',
+              title: 'Falha na atualização',
+              text: 'Não foi possível salvar as alterações',
               confirmButtonColor: '#e67e22'
             });
           });
@@ -299,20 +315,16 @@
       });
     }
 
-    function irParaEdicao() {
-      window.location.href = '/edicao';
-    }
-
     function limparChamadas() {
       Swal.fire({
         title: 'Limpar todas as chamadas?',
-        text: "Esta ação não pode ser desfeita!",
+        text: "Esta ação removerá permanentemente todos os registros!",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#8a0101',
         cancelButtonColor: '#3085d6',
-        confirmButtonText: '<i class="fas fa-trash-alt"></i> Sim, limpar tudo!',
-        cancelButtonText: '<i class="fas fa-times"></i> Cancelar',
+        confirmButtonText: 'Sim, limpar tudo!',
+        cancelButtonText: 'Cancelar',
         background: '#2a3d2d',
         color: 'white'
       }).then((result) => {
@@ -324,27 +336,27 @@
           .then(() => {
             Swal.fire({
               icon: 'success',
-              title: 'Chamadas apagadas!',
+              title: 'Registros apagados!',
               text: 'Todas as chamadas foram removidas',
-              confirmButtonColor: '#0e411d',
-              background: '#2a3d2d',
-              color: 'white'
+              confirmButtonColor: '#0e411d'
             });
+            carregarChamadas();
+            limparCampos();
           })
           .catch(error => {
             console.error('Erro ao limpar chamadas:', error);
             Swal.fire({
               icon: 'error',
-              title: 'Erro',
-              text: 'Falha ao limpar chamadas',
-              confirmButtonColor: '#e67e22',
-              background: '#2a3d2d',
-              color: 'white'
+              title: 'Falha ao limpar',
+              text: 'Não foi possível apagar os registros',
+              confirmButtonColor: '#e67e22'
             });
           });
         }
       });
     }
+
+    window.onload = carregarChamadas;
   </script>
 </body>
 </html>
