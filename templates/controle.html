@@ -132,6 +132,17 @@
       transform: translateY(-2px);
       box-shadow: 0 5px 15px rgba(179, 0, 0, 0.3);
     }
+
+    .btn-painel {
+      background-color: #01395e;
+      color: white;
+    }
+
+    .btn-painel:hover {
+      background-color: #08476b;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(2, 70, 116, 0.3);
+    }
     
     /* Ícones nos botões */
     .btn i {
@@ -204,6 +215,9 @@
     </button>
     <button class="btn btn-limpar" onclick="limparChamadas()">
       <i class="fas fa-trash-alt"></i> Limpar Todas
+    </button>
+    <button class="btn btn-painel" onclick="irParaPainel()">
+      <i class="fas fa-eye"></i> Visualizar Painel
     </button>
   </div>
 
@@ -301,6 +315,15 @@
 
     function irParaEdicao() {
       window.location.href = '/edicao';
+    }
+
+    function irParaPainel() {
+      const win = window.open('/', '_blank');
+      if (win) {
+        win.focus();
+      } else {
+        alert('Permita pop-ups para visualizar o painel.');
+      }
     }
 
     function limparChamadas() {
