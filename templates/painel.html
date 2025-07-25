@@ -20,73 +20,82 @@
       color: var(--branco);
       font-family: 'Segoe UI', system-ui, sans-serif;
       margin: 0;
-      padding: 2vw;
+      padding: 0;
       min-height: 100vh;
-      box-sizing: border-box;
+      display: flex;
+      overflow: hidden;
+    }
+    
+    .logo-container {
+      width: 120px;
       display: flex;
       flex-direction: column;
-    }
-    
-    .main-container {
-      display: flex;
-      flex: 1;
-      width: 100%;
-    }
-    
-    .logo-side {
-      display: flex;
       align-items: center;
       justify-content: center;
-      width: 100px;
+      padding: 20px;
+      background-color: rgba(10, 30, 15, 0.8);
     }
     
     .logo {
-      width: 80px;
+      width: 100px;
       height: auto;
+      margin-bottom: 30px;
     }
     
-    .content-center {
+    .main-content {
       flex: 1;
       display: flex;
       flex-direction: column;
-      max-width: 1800px;
-      margin: 0 auto;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
     }
     
-    .painel-container {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: min(20px, 2vw);
-      margin-bottom: min(20px, 2vw);
+    .carrossel-container {
+      width: 100%;
+      max-width: 900px;
+      height: 70vh;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     
     .chamada-card {
       background-color: var(--verde-painel);
-      border-radius: min(10px, 1vw);
+      border-radius: 15px;
       box-shadow: var(--sombra);
-      padding: min(20px, 2vw);
-      transition: all 0.3s ease;
-      display: flex;
-      flex-direction: column;
+      padding: 30px;
+      width: 80%;
+      max-width: 700px;
+      transition: all 0.5s ease;
+      position: absolute;
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    
+    .chamada-card.ativo {
+      opacity: 1;
+      transform: scale(1);
+      z-index: 10;
     }
     
     .card-content {
-      flex: 1;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: min(15px, 1.5vw);
+      gap: 20px;
     }
     
     .info-item {
       background-color: rgba(78, 241, 146, 0.1);
       border: 1px solid rgba(78, 241, 146, 0.3);
-      border-radius: min(8px, 0.8vw);
-      padding: min(15px, 1.5vw);
+      border-radius: 10px;
+      padding: 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: min(100px, 12vh);
+      min-height: 120px;
       transition: all 0.3s ease;
     }
     
@@ -97,14 +106,14 @@
     
     .info-label {
       color: var(--verde-destaque);
-      font-size: clamp(14px, 1.4vw, 18px);
-      margin-bottom: min(8px, 0.8vh);
+      font-size: 20px;
+      margin-bottom: 10px;
       font-weight: bold;
       text-align: center;
     }
     
     .info-value {
-      font-size: clamp(18px, 1.8vw, 24px);
+      font-size: 24px;
       font-weight: 600;
       color: var(--branco);
       text-align: center;
@@ -112,65 +121,235 @@
     }
     
     .card-title {
-      font-size: clamp(18px, 1.8vw, 24px);
-      margin-bottom: min(20px, 2vh);
+      font-size: 28px;
+      margin-bottom: 20px;
       color: var(--verde-destaque);
       font-weight: bold;
-      padding-bottom: min(8px, 0.8vh);
-      border-bottom: min(1px, 0.1vw) solid var(--verde-painel);
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(78, 241, 146, 0.3);
+      text-align: center;
     }
     
     .card-timestamp {
-      margin-top: min(15px, 2vh);
+      margin-top: 20px;
       color: var(--cinza-escuro);
-      font-size: clamp(12px, 1.2vw, 14px);
+      font-size: 16px;
       font-style: italic;
-      text-align: right;
+      text-align: center;
+    }
+    
+    .controles {
+      margin-top: 30px;
+      display: flex;
+      gap: 15px;
+    }
+    
+    .controle-btn {
+      background-color: var(--verde-destaque);
+      color: var(--verde-principal);
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+    
+    .controle-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 15px rgba(78, 241, 146, 0.5);
+    }
+    
+    .indicadores {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    
+    .indicador {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background-color: var(--cinza-escuro);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .indicador.ativo {
+      background-color: var(--verde-destaque);
+      transform: scale(1.2);
+    }
+    
+    .proximas-chamadas {
+      width: 300px;
+      padding: 20px;
+      background-color: rgba(10, 30, 15, 0.8);
+      overflow-y: auto;
+      max-height: 100vh;
+    }
+    
+    .proximas-chamadas h3 {
+      color: var(--verde-destaque);
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 20px;
+      border-bottom: 1px solid var(--verde-destaque);
+      padding-bottom: 10px;
+    }
+    
+    .proxima-chamada-item {
+      background-color: rgba(78, 241, 146, 0.1);
+      border: 1px solid rgba(78, 241, 146, 0.2);
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 10px;
+      transition: all 0.3s ease;
+    }
+    
+    .proxima-chamada-item:hover {
+      background-color: rgba(78, 241, 146, 0.2);
+      transform: translateX(5px);
+    }
+    
+    .proxima-chamada-item.ativa {
+      background-color: rgba(78, 241, 146, 0.3);
+      border-color: var(--verde-destaque);
+    }
+    
+    .proxima-chamada-horario {
+      color: var(--verde-destaque);
+      font-weight: bold;
+      font-size: 18px;
+      margin-bottom: 5px;
+    }
+    
+    .proxima-chamada-paciente {
+      font-size: 16px;
+      margin-bottom: 3px;
+    }
+    
+    .proxima-chamada-sala {
+      font-size: 14px;
+      color: var(--cinza-claro);
+    }
+    
+    @media (max-width: 1024px) {
+      .proximas-chamadas {
+        width: 250px;
+      }
     }
     
     @media (max-width: 768px) {
-      .painel-container {
-        grid-template-columns: 1fr;
+      body {
+        flex-direction: column;
+      }
+      
+      .logo-container {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 10px 20px;
+      }
+      
+      .logo {
+        margin-bottom: 0;
+        width: 60px;
+      }
+      
+      .proximas-chamadas {
+        width: 100%;
+        max-height: 200px;
+        order: 3;
+      }
+      
+      .carrossel-container {
+        height: 60vh;
+      }
+      
+      .chamada-card {
+        width: 90%;
+        padding: 20px;
       }
       
       .card-content {
         grid-template-columns: 1fr;
       }
-      
-      .logo-side {
-        display: none;
-      }
     }
     
     @media (max-width: 480px) {
+      .chamada-card {
+        width: 95%;
+        padding: 15px;
+      }
+      
       .info-item {
-        min-height: min(80px, 10vh);
+        min-height: 100px;
+        padding: 15px;
+      }
+      
+      .card-title {
+        font-size: 22px;
+      }
+      
+      .info-label {
+        font-size: 16px;
+      }
+      
+      .info-value {
+        font-size: 18px;
+      }
+      
+      .controle-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+      }
+      
+      .proxima-chamada-horario {
+        font-size: 16px;
+      }
+      
+      .proxima-chamada-paciente {
+        font-size: 14px;
       }
     }
   </style>
 </head>
 <body>
-  <div class="main-container">
-    <div class="logo-side">
-      <img src="/static/logo.png" class="logo" alt="Logo">
+  <div class="logo-container">
+    <img src="/static/logo.png" class="logo" alt="Logo">
+  </div>
+  
+  <div class="main-content">
+    <div class="carrossel-container" id="carrossel">
+      <!-- As chamadas serão inseridas aqui dinamicamente -->
     </div>
     
-    <div class="content-center">
-      <div class="painel-container" id="chamadas-superior">
-        <!-- 3 primeiros cards serão inseridos aqui -->
-      </div>
-      
-      <div class="painel-container" id="chamadas-inferior">
-        <!-- 3 últimos cards serão inseridos aqui -->
-      </div>
+    <div class="controles">
+      <button class="controle-btn" id="btn-anterior">&#10094;</button>
+      <button class="controle-btn" id="btn-proximo">&#10095;</button>
     </div>
     
-    <div class="logo-side">
-      <img src="/static/logo.png" class="logo" alt="Logo">
+    <div class="indicadores" id="indicadores">
+      <!-- Os indicadores serão inseridos aqui dinamicamente -->
     </div>
+  </div>
+  
+  <div class="proximas-chamadas" id="proximas-chamadas">
+    <h3>Próximas Chamadas</h3>
+    <!-- Lista de próximas chamadas será inserida aqui -->
   </div>
 
   <script>
+    let chamadas = [];
+    let currentIndex = 0;
+    let intervaloCarrossel;
+    const tempoTransicao = 5000; // 5 segundos
+
     function formatarDataHora(dataString) {
       if (!dataString) return '-';
       const data = new Date(dataString);
@@ -180,6 +359,7 @@
     function criarCardChamada(chamada, index) {
       const card = document.createElement('div');
       card.className = 'chamada-card';
+      card.dataset.index = index;
       
       const titulo = document.createElement('div');
       titulo.className = 'card-title';
@@ -189,7 +369,6 @@
       const content = document.createElement('div');
       content.className = 'card-content';
       
-      // Criar os quadrados de informação
       const campos = [
         { label: 'Horário', value: chamada.horario || '-', id: `chamada_${index}_horario` },
         { label: 'Sala', value: chamada.sala || '-', id: `chamada_${index}_sala` },
@@ -226,21 +405,133 @@
       return card;
     }
 
+    function atualizarIndicadores() {
+      const container = document.getElementById('indicadores');
+      container.innerHTML = '';
+      
+      chamadas.forEach((_, index) => {
+        const indicador = document.createElement('div');
+        indicador.className = 'indicador';
+        if (index === currentIndex) indicador.classList.add('ativo');
+        indicador.dataset.index = index;
+        indicador.addEventListener('click', () => {
+          irParaChamada(index);
+        });
+        container.appendChild(indicador);
+      });
+    }
+
+    function atualizarProximasChamadas() {
+      const container = document.getElementById('proximas-chamadas');
+      // Remove o título existente
+      while (container.firstChild) {
+        container.removeChild(container.firstChild);
+      }
+      
+      // Adiciona o título novamente
+      const titulo = document.createElement('h3');
+      titulo.textContent = 'Próximas Chamadas';
+      container.appendChild(titulo);
+      
+      if (chamadas.length === 0) {
+        const mensagem = document.createElement('div');
+        mensagem.textContent = 'Nenhuma chamada agendada';
+        mensagem.style.textAlign = 'center';
+        mensagem.style.color = 'var(--cinza-claro)';
+        container.appendChild(mensagem);
+        return;
+      }
+      
+      // Adiciona os itens das próximas chamadas
+      chamadas.forEach((chamada, index) => {
+        const item = document.createElement('div');
+        item.className = 'proxima-chamada-item';
+        if (index === currentIndex) item.classList.add('ativa');
+        item.dataset.index = index;
+        item.addEventListener('click', () => {
+          irParaChamada(index);
+        });
+        
+        const horario = document.createElement('div');
+        horario.className = 'proxima-chamada-horario';
+        horario.textContent = chamada.horario || 'Horário não informado';
+        
+        const paciente = document.createElement('div');
+        paciente.className = 'proxima-chamada-paciente';
+        paciente.textContent = chamada.paciente || 'Paciente não informado';
+        
+        const sala = document.createElement('div');
+        sala.className = 'proxima-chamada-sala';
+        sala.textContent = `Sala: ${chamada.sala || 'Não informada'}`;
+        
+        item.appendChild(horario);
+        item.appendChild(paciente);
+        item.appendChild(sala);
+        container.appendChild(item);
+      });
+    }
+
+    function atualizarCarrossel() {
+      const container = document.getElementById('carrossel');
+      container.innerHTML = '';
+      
+      chamadas.forEach((chamada, index) => {
+        const card = criarCardChamada(chamada, index);
+        if (index === currentIndex) card.classList.add('ativo');
+        container.appendChild(card);
+      });
+      
+      atualizarIndicadores();
+      atualizarProximasChamadas();
+    }
+
+    function proximaChamada() {
+      if (chamadas.length === 0) return;
+      currentIndex = (currentIndex + 1) % chamadas.length;
+      atualizarCarrossel();
+    }
+
+    function chamadaAnterior() {
+      if (chamadas.length === 0) return;
+      currentIndex = (currentIndex - 1 + chamadas.length) % chamadas.length;
+      atualizarCarrossel();
+    }
+
+    function irParaChamada(index) {
+      if (chamadas.length === 0) return;
+      currentIndex = index;
+      atualizarCarrossel();
+      reiniciarIntervalo();
+    }
+
+    function iniciarIntervalo() {
+      if (chamadas.length > 1) {
+        intervaloCarrossel = setInterval(proximaChamada, tempoTransicao);
+      }
+    }
+
+    function reiniciarIntervalo() {
+      clearInterval(intervaloCarrossel);
+      iniciarIntervalo();
+    }
+
     function atualizarPainel() {
       fetch('/dados')
         .then(res => res.json())
         .then(data => {
-          const chamadas = data.chamadas || [];
+          const novasChamadas = data.chamadas || [];
           
-          // Se não houver chamadas, limpa os containers
-          if (chamadas.length === 0) {
-            document.getElementById('chamadas-superior').innerHTML = '';
-            document.getElementById('chamadas-inferior').innerHTML = '';
+          if (novasChamadas.length === 0) {
+            document.getElementById('carrossel').innerHTML = '';
+            document.getElementById('indicadores').innerHTML = '';
+            document.getElementById('proximas-chamadas').innerHTML = '<h3>Próximas Chamadas</h3><div style="text-align:center;color:var(--cinza-claro)">Nenhuma chamada agendada</div>';
+            chamadas = [];
+            clearInterval(intervaloCarrossel);
             return;
           }
           
           // Ordena as chamadas por horário
-          chamadas.sort((a, b) => {
+          novasChamadas.sort((a, b) => {
             const [horaA, minutoA] = (a.horario || '').split(':').map(Number);
             const [horaB, minutoB] = (b.horario || '').split(':').map(Number);
             
@@ -248,37 +539,40 @@
             return horaA - horaB;
           });
           
-          // Pega apenas as 6 primeiras chamadas
-          const chamadasExibidas = chamadas.slice(0, 6);
+          // Verifica se as chamadas mudaram
+          const chamadasMudaram = JSON.stringify(novasChamadas) !== JSON.stringify(chamadas);
           
-          // Atualiza os containers
-          const containerSuperior = document.getElementById('chamadas-superior');
-          const containerInferior = document.getElementById('chamadas-inferior');
-          containerSuperior.innerHTML = '';
-          containerInferior.innerHTML = '';
-          
-          // Adiciona os 3 primeiros cards no container superior
-          chamadasExibidas.slice(0, 3).forEach((chamada, index) => {
-            containerSuperior.appendChild(
-              criarCardChamada(chamada, index)
-            );
-          });
-          
-          // Adiciona os 3 últimos cards no container inferior
-          chamadasExibidas.slice(3, 6).forEach((chamada, index) => {
-            containerInferior.appendChild(
-              criarCardChamada(chamada, index + 3)
-            );
-          });
+          if (chamadasMudaram) {
+            chamadas = novasChamadas;
+            currentIndex = 0;
+            atualizarCarrossel();
+            reiniciarIntervalo();
+          }
         })
         .catch(error => {
           console.error('Erro ao atualizar painel:', error);
         });
     }
 
-    // Atualiza a cada 10 segundos e imediatamente ao carregar
-    setInterval(atualizarPainel, 10000);
-    window.addEventListener('DOMContentLoaded', atualizarPainel);
+    // Event listeners para os controles
+    document.getElementById('btn-proximo').addEventListener('click', () => {
+      proximaChamada();
+      reiniciarIntervalo();
+    });
+    
+    document.getElementById('btn-anterior').addEventListener('click', () => {
+      chamadaAnterior();
+      reiniciarIntervalo();
+    });
+
+    // Iniciar o carrossel
+    window.addEventListener('DOMContentLoaded', () => {
+      atualizarPainel();
+      iniciarIntervalo();
+      
+      // Atualizar a cada 10 segundos
+      setInterval(atualizarPainel, 10000);
+    });
   </script>
 </body>
 </html>
